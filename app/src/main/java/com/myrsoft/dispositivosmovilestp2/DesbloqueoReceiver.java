@@ -3,27 +3,30 @@ package com.myrsoft.dispositivosmovilestp2;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
+/**
+ * Este receiver solo detecta el evento y avisa al ViewModel.
+ * No debe mostrar mensajes ni hacer llamadas directamente.
+ */
 public class DesbloqueoReceiver extends BroadcastReceiver {
+
+    private final MainViewModel viewModel;
+
+    public DesbloqueoReceiver(MainViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean pantallaDesbloqueada = intent.getAction().equals("android.action.USER_PRESENT");
-
-        //Muestra un toast si la pantalla está desbloqueada
-        Toast.makeText(context, "Pantalla desbloqueada detectada", Toast.LENGTH_SHORT).show();
-
-        //Registra en el logcat el desbloqueo
-        Log.d("mensaje", "Pantalla desbloqueada detectada");
-
-        //Intent implicito para llamar al profe
-
-        Intent llamarAlProfe = new Intent(Intent.ACTION_CALL);
-        llamarAlProfe.setData(Uri.parse("tel:2664553747"));
-        llamarAlProfe.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(llamarAlProfe);
+        // Verificamos que la accion sea la correcta
+        if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
+            Log.d("APP_LOG", "Broadcast detectado: Pantalla desbloqueada");
+            
+            // Notificamos al ViewModel para que procese la logica
+            if (viewModel != null) {
+                viewModel.notificarDesbloqueo();
+            }
+        }
     }
 }
