@@ -1,6 +1,6 @@
 Descripción de la app: Uso de BroadcastReceiver para capturar el evento de desbloqueo de pantalla y realizar una llamada 
 
-Integrantes del Grupos:
+Integrantes del Grupo:
 
 Myriam Alvarez - 22717003
 Maria Romanela Ricchiardi - 35842052
