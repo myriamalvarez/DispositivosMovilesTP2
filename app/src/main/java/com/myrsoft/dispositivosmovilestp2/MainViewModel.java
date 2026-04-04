@@ -6,40 +6,44 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 /**
- * Notas para el equipo:
- * 1. El ViewModel NO debe tener Context ni Toast.
- * 2. Solo emite estados y eventos que la Activity observa.
+ * ViewModel que gestiona la logica de la aplicacion.
+ * Sigue las reglas de no usar Context ni clases de Android directas (UI).
  */
 public class MainViewModel extends ViewModel {
 
-    // Estado de la interfaz (Cargando, Exito, Error)
+    // LiveData privado para el estado de la UI y publico para la observacion
     private final MutableLiveData<EstadoUI> estadoUI = new MutableLiveData<>(EstadoUI.EXITO);
     public LiveData<EstadoUI> getEstadoUI() {
         return estadoUI;
     }
 
-    // Eventos de una sola ejecucion (se borran al ser leidos)
+    // LiveData para eventos de una sola ejecucion (Toast)
     private final MutableLiveData<Evento<String>> eventoMostrarToast = new MutableLiveData<>();
     public LiveData<Evento<String>> getEventoMostrarToast() {
         return eventoMostrarToast;
     }
 
+    // LiveData para eventos de una sola ejecucion (Llamada)
     private final MutableLiveData<Evento<String>> eventoRealizarLlamada = new MutableLiveData<>();
     public LiveData<Evento<String>> getEventoRealizarLlamada() {
         return eventoRealizarLlamada;
     }
 
     /**
-     * Se llama desde el Receiver cuando detecta el desbloqueo.
+     * Metodo llamado cuando se detecta el desbloqueo de pantalla.
+     * Centraliza la logica de respuesta al evento.
      */
     public void notificarDesbloqueo() {
-        // Logcat segun consigna
+        // Logcat segun requerimiento
         Log.d("MVVM_LOG", "Evento de desbloqueo procesado en el ViewModel");
 
-        // Notificamos que queremos mostrar un Toast
+        // Cambiamos el estado a EXITO para indicar que se proceso correctamente
+        estadoUI.setValue(EstadoUI.EXITO);
+
+        // Disparamos el evento para mostrar el mensaje solicitado
         eventoMostrarToast.setValue(new Evento<>("Pantalla desbloqueada detectada"));
 
-        // Notificamos que queremos abrir las llamadas con el numero 2664553747
+        // Disparamos el evento para abrir la aplicacion de llamadas con el numero solicitado
         eventoRealizarLlamada.setValue(new Evento<>("2664553747"));
     }
 }

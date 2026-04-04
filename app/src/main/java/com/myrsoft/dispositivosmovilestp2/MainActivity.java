@@ -43,11 +43,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
             )
         );
-
+        //ejecutarSiNoFueManejado(...): Esta funcion es el "seguro".
+        // Adentro tiene un if oculto que pregunta: "¿Ya mostre esto antes?".
+        // Si la respuesta es NO, entonces ejecuta la funcion de llamada.
+        // Si la respuesta es SI (porque rotaste la pantalla), ignora el pedido.
         viewModel.getEventoRealizarLlamada().observe(this, evento -> 
             evento.ejecutarSiNoFueManejado(this::ejecutarIntentLlamada)
         );
-
+        // El simbolo :: es una forma abreviada de escribir una Lambda.
+        // Esto nos permite que la pantalla se actualice sola sin tener que refrescarla manualmente.
         // Si necesitan cambiar algo en la pantalla segun el estado (ej. un loading), usen esto:
         viewModel.getEstadoUI().observe(this, this::renderizarEstado);
     }
