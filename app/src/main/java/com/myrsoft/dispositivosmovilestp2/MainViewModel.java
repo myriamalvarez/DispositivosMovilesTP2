@@ -8,11 +8,15 @@ import androidx.lifecycle.ViewModel;
 /**
  * ViewModel que gestiona la logica de la aplicacion.
  * Sigue las reglas de no usar Context ni clases de Android directas (UI).
+ * Aqui decidimos que hacer cuando ocurre el evento.
  */
 public class MainViewModel extends ViewModel {
 
     // LiveData privado para el estado de la UI y publico para la observacion
     private final MutableLiveData<EstadoUI> estadoUI = new MutableLiveData<>(EstadoUI.EXITO);
+    
+    // COMPANEROS: Exponemos el LiveData como publico para que la Activity lo observe,
+    // pero mantenemos el MutableLiveData privado para que la Activity no pueda modificarlo.
     public LiveData<EstadoUI> getEstadoUI() {
         return estadoUI;
     }
@@ -41,6 +45,7 @@ public class MainViewModel extends ViewModel {
         estadoUI.setValue(EstadoUI.EXITO);
 
         // Disparamos el evento para mostrar el mensaje solicitado
+        // Usamos Evento para asegurar que solo se muestre una vez
         eventoMostrarToast.setValue(new Evento<>("Pantalla desbloqueada detectada"));
 
         // Disparamos el evento para abrir la aplicacion de llamadas con el numero solicitado
